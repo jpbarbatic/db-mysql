@@ -5,17 +5,26 @@ include "../src/db_mysql.php";
 $usuario=[
 	'nombre'=>'estebanc',
 	'nombre_completo'=>'Esteban Coesta Ocupado',
-	'email'=>'calimero@gmail.com'
+	'email'=>'calimero@gmail.com',
+	'telefono'=>'32423423'
 ];
 print_r($usuario);
 
 $conn=db_open();
-$id=db_insert($conn, 'usuarios', $usuario);
-$usuario['id']=$id;
-$usuario['email']='estebanc@gmail.com';
-db_update($conn, 'usuarios', $usuario);
+	// Insertamos un usuario
+	$id=db_insert($conn, 'usuarios', $usuario);
 
-$usuario=db_query($conn, "SELECT * FROM usuarios WHERE id=?", [$id]);
-print_r($usuario);
+	// Obtenemos el usuario que hemos insertado
+	$usuario=db_query($conn, "SELECT * FROM usuarios WHERE id=?", [$id])[0];
+	print_r($usuario);
 
+	// Cambiamos el correo
+	$usuario['email']='estebanc@gmail.com';
+
+	// Actualizamos el usuario
+	db_update($conn, 'usuarios', $usuario);
+
+	// Obtenemos el usuario 
+	$usuario=db_query($conn, "SELECT * FROM usuarios WHERE id=?", [$id])[0];
+	print_r($usuario);
 db_close($conn);
