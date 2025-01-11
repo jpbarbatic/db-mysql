@@ -1,6 +1,6 @@
 <?php
 include "config.php";
-include "db_mysql.php";
+include "../src/db_mysql.php";
 
 $usuario=[
 	'nombre'=>'estebanc',
