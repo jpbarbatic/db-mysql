@@ -9,6 +9,7 @@
 
 /**
 *	Abre una conexión MySQLi con los datos definidos en las constantes
+*
 *	@return Devuelve la conexión si se realiza correctamente o false en caso contrario
 */
 function db_open()
@@ -32,22 +33,23 @@ function db_close($conn){
 }
 
 /**
-*
 * Realiza una consulta. Está orientada a consultas SELECT
 *
-* @return Devuelve un array con los resultados
+* @return Devuelve un array con los resultados. false en caso contrario
 */
-function db_query($conn, $sql, $values){
+function db_query($conn, $sql, $values=null){
+
 	try{
 		$stmt=mysqli_prepare($conn, $sql);
 		mysqli_stmt_execute($stmt, $values);
 		$res=mysqli_stmt_get_result($stmt);
 		$data=mysqli_fetch_all($res, MYSQLI_ASSOC);
+
 		mysqli_free_result($res);
 		return $data;
 	}catch(Exception $e){
 		echo $e;
-		return null;
+		return false;
 	}
 }
 
@@ -75,10 +77,11 @@ function db_insert($conn, $table, $dto){
 	}
 }
 
-/*** 
+/**
 * Realiza un UPDATE. Le pasamos el nombre de la tabla que queramos actualizar,
 * un array asociativo con los datos. Las claves deben corresponder
 * con campos existentes en la tabla. El array debe incluir una clave id y su valor
+*
 * @param $conn conexión MySQLi que esté abierta
 * @param $table nombre de la tabla
 * @param $dto array asociativo con los datos a insertar
@@ -99,6 +102,7 @@ function db_update($conn, $table, $dto){
 			$fields[]="$key=?";
 		}
 		$sql="UPDATE $table SET ".implode(', ', $fields)." WHERE id=$id";
+		echo $sql;
 		$stmt=mysqli_prepare($conn, $sql);
 		return mysqli_stmt_execute($stmt, array_values($dto));
 	}catch(Exception $e)
@@ -109,6 +113,7 @@ function db_update($conn, $table, $dto){
 
 /**
 * Borrar la fila de la tabla cuyo id sea igual al que se pasa por parámetro
+*
 * @param $conn Conexión MySQLi
 * @param $table Nombre de la tabla
 * @param $id id de la fila
