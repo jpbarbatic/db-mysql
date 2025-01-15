@@ -43,10 +43,14 @@ function db_query($conn, $sql, $values=null){
 		$stmt=mysqli_prepare($conn, $sql);
 		mysqli_stmt_execute($stmt, $values);
 		$res=mysqli_stmt_get_result($stmt);
-		$data=mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-		mysqli_free_result($res);
-		return $data;
+		if(gettype($res)=='boolean'){
+			return $res;
+		}else{
+			$data=mysqli_fetch_all($res, MYSQLI_ASSOC);
+			mysqli_free_result($res);
+			return $data;
+		}
 	}catch(Exception $e){
 		echo $e;
 		return false;
