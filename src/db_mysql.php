@@ -102,7 +102,7 @@ function db_update($conn, $table, $dto){
 			$fields[]="$key=?";
 		}
 		$sql="UPDATE $table SET ".implode(', ', $fields)." WHERE id=$id";
-		echo $sql;
+
 		$stmt=mysqli_prepare($conn, $sql);
 		return mysqli_stmt_execute($stmt, array_values($dto));
 	}catch(Exception $e)
