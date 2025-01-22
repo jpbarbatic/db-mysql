@@ -69,6 +69,7 @@ function db_query($conn, $sql, $values=null){
 */
 function db_insert($conn, $table, $dto){
 	try{
+		unset($dto['id']);
 		$fields=implode(', ', array_keys($dto));
 		$values=array_values($dto);
 		$params=implode(', ', array_fill(0, count($values), '?'));
@@ -109,8 +110,7 @@ function db_update($conn, $table, $dto){
 
 		$stmt=mysqli_prepare($conn, $sql);
 		return mysqli_stmt_execute($stmt, array_values($dto));
-	}catch(Exception $e)
-	{
+	}catch(Exception $e){
 		return false;
 	}
 }
